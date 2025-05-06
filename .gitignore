@@ -1,0 +1,18 @@
+# Ambientes virtuais
+venv/
+.env/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+
+# Configs locais
+.vscode/
+*.sqlite3
+
+# Arquivos temporários
+*.tmp
+*.bak
