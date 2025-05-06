@@ -1,18 +1,38 @@
 # Ambientes virtuais
 venv/
 .env/
+*.env
 
-# Cache Python
+# Cache e compilação Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
 
-# Logs
-*.log
-
-# Configs locais
+# IDEs e editores
 .vscode/
-*.sqlite3
+.idea/
+*.sublime-workspace
+*.sublime-project
 
-# Arquivos temporários
+# Arquivos de log
+*.log
+logs/
+
+# Dados temporários e cache
 *.tmp
 *.bak
+*.db
+*.sqlite3
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Histórico de downloads
+download_history.json
+
+# Arquivos gerados automaticamente
+dist/
+build/
+*.spec
