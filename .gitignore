@@ -1,38 +1,30 @@
-# Ambientes virtuais
+# Ambiente virtual
 venv/
-.env/
-*.env
 
-# Cache e compilação Python
+# Cache Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-
-# IDEs e editores
-.vscode/
-.idea/
-*.sublime-workspace
-*.sublime-project
 
 # Arquivos de log
-*.log
 logs/
+*.log
 
-# Dados temporários e cache
+# Configurações locais de IDEs
+.vscode/
+.idea/
+
+# Arquivos temporários
 *.tmp
 *.bak
-*.db
-*.sqlite3
 
-# Arquivos do sistema
-.DS_Store
-Thumbs.db
-
-# Histórico de downloads
-download_history.json
-
-# Arquivos gerados automaticamente
-dist/
+# Arquivos de build (futuros instaladores)
 build/
+dist/
 *.spec
+
+# Arquivos de exportação ou testes
+estrutura.txt
+Passo_a_Passo_Aria2_Control_APP.pdf
+
+# Histórico de execução (opcional, se for criar depois)
+download_history.json
