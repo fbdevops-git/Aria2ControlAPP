@@ -65,8 +65,6 @@ class Aria2InstallerWindow(tk.Toplevel):
         self.init_gui()
     
 
-
-
     def init_gui(self):
         """
         Inicializa a interface gráfica
@@ -126,6 +124,8 @@ class Aria2InstallerWindow(tk.Toplevel):
             width=15
         )
         self.install_button.pack(side=tk.LEFT, padx=5)
+        self.install_button["state"] = "disabled"
+
 
         # Botão Cancelar
         self.cancel_button = ttk.Button(
@@ -240,9 +240,6 @@ class Aria2InstallerWindow(tk.Toplevel):
         self.protocol("WM_DELETE_WINDOW", self.on_close)
     
 
-
-
-
     def center_window(self):
         """
         Centraliza a janela em relação à janela principal
@@ -260,12 +257,14 @@ class Aria2InstallerWindow(tk.Toplevel):
         
         self.geometry(f"{width}x{height}+{x}+{y}")
     
+
     def on_close(self):
         """
         Evento de fechamento da janela
         """
         self.destroy()
     
+
     def browse_dir(self):
         """
         Abre o diálogo para selecionar o diretório de instalação
@@ -275,7 +274,6 @@ class Aria2InstallerWindow(tk.Toplevel):
         )
         if directory:
             self.install_dir_var.set(directory)
-    
     
 
     def show_admin_warning(self):
@@ -304,8 +302,6 @@ class Aria2InstallerWindow(tk.Toplevel):
             return True
 
 
-
-    
     def update_progress(self, value, status_text=None):
         """
         Atualiza a barra de progresso e o texto de status
@@ -314,7 +310,6 @@ class Aria2InstallerWindow(tk.Toplevel):
         if status_text:
             self.status_var.set(status_text)
         self.update_idletasks()
-    
     
     
     def _download_thread(self, params):
@@ -343,6 +338,8 @@ class Aria2InstallerWindow(tk.Toplevel):
                 # Atualizar os botões na thread principal
                 self.after(0, lambda: self.install_button.config(state=tk.NORMAL))
                 self.after(0, lambda: self.download_button.config(state=tk.NORMAL))
+                self.after(0, lambda: self.install_button.config(state="normal"))
+
             else:
                 # Mostrar erro na thread principal
                 self.after(0, lambda: self._show_error(result['error']))
@@ -350,8 +347,6 @@ class Aria2InstallerWindow(tk.Toplevel):
         except Exception as e:
             # Mostrar erro na thread principal
             self.after(0, lambda: self._show_error(f"Erro durante o download: {str(e)}"))
-
-
 
 
     def _show_error(self, message):
@@ -365,10 +360,6 @@ class Aria2InstallerWindow(tk.Toplevel):
             self.install_button.config(state=tk.NORMAL)
 
     
-
-
-
-
     def start_download(self):
         """
         Inicia o processo de download em uma thread separada

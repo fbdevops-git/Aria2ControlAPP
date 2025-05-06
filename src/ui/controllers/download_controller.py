@@ -16,4 +16,17 @@ class DownloadController:
         waiting = self.rpc.tell_waiting(0, 1000).get("result", [])
         stopped = self.rpc.tell_stopped(0, 1000).get("result", [])
         return active + waiting + stopped
+    
+    def pause_download(self, gid):
+        """Pausa um download específico."""
+        return self.rpc.request("aria2.pause", [gid])
+
+    def resume_download(self, gid):
+        """Retoma um download pausado."""
+        return self.rpc.request("aria2.unpause", [gid])
+
+    def stop_download(self, gid):
+        """Remove um download da fila."""
+        return self.rpc.request("aria2.remove", [gid])
+
 

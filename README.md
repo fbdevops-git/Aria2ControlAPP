@@ -1,70 +1,72 @@
-# Aria2 Control APP
+# Aria2ControlAPP
 
-Aplicativo desktop em Python (Tkinter) para gerenciar downloads com o cliente Aria2 de forma simples, visual e eficiente.
+Interface gráfica para gerenciamento de downloads utilizando o Aria2.
 
----
+## Visão Geral
+O **Aria2ControlAPP** é uma aplicação desenvolvida em Python com interface Tkinter, projetada para facilitar o controle do Aria2, um cliente de download leve e multiprotocolo.
 
-## 📦 Funcionalidades
+Ele oferece recursos como:
+- Instalação automática do Aria2
+- Adição e gerenciamento de downloads
+- Pausar, continuar e parar downloads individualmente
+- Monitoramento em tempo real de velocidade e progresso
+- Notificações com som ao concluir downloads
+- Histórico persistente de downloads
 
-- Interface gráfica amigável (Tkinter)
-- Download acelerado com múltiplas conexões
-- Instalação automatizada do Aria2
-- Verificação em tempo real do status do Aria2
-- Configuração de diretório, velocidade e conexões
-- Compatível com Windows 10/11 (64 bits)
+## Tecnologias Utilizadas
+- **Python 3.13**
+- **Tkinter**
+- **JSON-RPC** (para comunicação com Aria2)
+- **Plyer** (notificações)
+- **Playsound** (efeito sonoro)
 
----
-
-## 🚀 Como Executar
-
-1. Instale as dependências:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. Inicie o app:
-   ```bash
-   python src/main.py
-   ```
-
----
-
-## 🗂 Estrutura do Projeto
-
+## Estrutura do Projeto
 ```
-/src
-  /ui           → Interfaces gráficas (janela principal, configurações, instalador)
-  /utils        → Lógicas auxiliares (status, arquivos, instalação)
-main.py         → Inicia o app
-requirements.txt→ Dependências do projeto
+Area2ControlAPP/
+├── src/
+│   ├── assets/sounds/
+│   ├── data/                    # Histórico de downloads
+│   ├── logs/                   # Log da aplicação
+│   ├── ui/
+│   │   ├── controllers/        # DownloadController
+│   │   ├── utils/              # Funções auxiliares (RPC, instalação, status, logs)
+│   │   ├── main_window.py      # Interface principal
+│   │   ├── settings_window.py  # Configurações do Aria2
+│   │   ├── network_window.py   # Configurações de rede (opcional)
+│   │   ├── history_window.py   # Janela de histórico
+│   │   …
+├── venv/ (ignorado)
+├── README.md
+├── requirements.txt
+├── .gitignore
 ```
 
+## Instalação
+1. Instale o Python 3.13 (64 bits recomendado)
+2. Clone o repositório:
+```bash
+git clone https://github.com/fbdevops-git/Aria2ControlAPP.git
+cd Aria2ControlAPP
+```
+3. Crie e ative o ambiente virtual:
+```bash
+python -m venv venv
+venv\Scripts\activate  # no Windows
+```
+4. Instale as dependências:
+```bash
+pip install -r requirements.txt
+```
+5. Execute o aplicativo:
+```bash
+python -m src.main
+```
+
+## Licença
+Este projeto é distribuído sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## Contribuições
+Ainda não está aberto para colaboração externa. Caso queira sugerir melhorias, entre em contato com o autor via GitHub.
+
 ---
-
-## 💡 Requisitos
-
-- Python 3.10+
-- Windows 64 bits
-- `requests`, `pywin32`
-
----
-
-## ❓ Contribuindo
-
-1. Faça um fork do projeto
-2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
-3. Faça um commit (`git commit -am 'Adiciona nova funcionalidade'`)
-4. Envie um push (`git push origin feature/nova-funcionalidade`)
-5. Abra um Pull Request 🚀
-
----
-
-## 📸 Preview
-
-*(Adicione aqui uma imagem da interface no futuro)*
-
----
-
-## 📃 Licença
-
-Este projeto é de uso livre e aberto para modificação.
+**Desenvolvido por [fbdevops-git](https://github.com/fbdevops-git)**

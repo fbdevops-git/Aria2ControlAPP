@@ -16,7 +16,7 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("WebUI-Aria2 - Gerenciador de Downloads")
-        self.geometry("800x600")
+        self.geometry("800x640")
 
         self.controller = DownloadController()  #Adicione aqui
 
@@ -26,6 +26,67 @@ class MainWindow(tk.Tk):
 
         Logger.setup_logger(self.append_log_to_ui)
         Logger.log_info("Aplicativo iniciado.")
+        self.tree.bind("<Button-1>", self.on_treeview_click)
+
+
+    def on_treeview_click(self, event):
+        item_id = self.tree.identify_row(event.y)
+        column = self.tree.identify_column(event.x)
+
+        if column == "#5" and item_id:  # Coluna Ações
+            values = self.tree.item(item_id, "values")
+            action_text = values[4]
+            gid = item_id  # usamos o GID como iid
+
+            if "⏵" in action_text:
+                self.controller.resume_download(gid)
+                Logger.log_info(f"Download retomado: {gid}")
+            elif "⏸" in action_text:
+                self.controller.pause_download(gid)
+                Logger.log_info(f"Download pausado: {gid}")
+            elif "⏹" in action_text:
+                confirm = tk.messagebox.askyesno(
+                    "Confirmar remoção",
+                    "Tem certeza que deseja parar e remover este download da fila?"
+                )
+                if confirm:
+                    self.controller.stop_download(gid)
+                    Logger.log_info(f"Download removido: {gid}")
+
+
+            # Atualiza a tabela após a ação
+            self.load_downloads()
+
+
+    def ensure_aria2_ready(self):
+        from src.ui.utils.aria2_status import Aria2StatusChecker
+        import subprocess
+        import time
+
+        status = Aria2StatusChecker.get_status()
+
+        if "não instalado" in status.lower():
+            tk.messagebox.showerror("Erro", "O Aria2 não está instalado.")
+            return False
+
+        if "não está rodando" in status.lower():
+            Logger.log_info("Aria2 não está rodando. Tentando iniciar...")
+            try:
+                subprocess.Popen(["aria2c", "--enable-rpc"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                time.sleep(5)  # Aguarda para dar tempo de iniciar
+            except Exception as e:
+                tk.messagebox.showerror("Erro", f"Falha ao iniciar o Aria2: {e}")
+                Logger.log_error(f"Erro ao iniciar o Aria2: {e}")
+                return False
+
+            # Verifica novamente se subiu
+            time.sleep(1)
+            status = Aria2StatusChecker.get_status()
+            if "rodando" not in status.lower():
+                tk.messagebox.showerror("Erro", "O Aria2 não pôde ser iniciado.")
+                return False
+
+        return True
 
 
     def load_downloads(self):
@@ -43,7 +104,7 @@ class MainWindow(tk.Tk):
 
     def update_treeview(self, downloads):
         self.tree.delete(*self.tree.get_children())
-        
+
         for item in downloads:
             # Verifica se o download está completo
             if item.get("status") == "complete":
@@ -58,18 +119,32 @@ class MainWindow(tk.Tk):
             velocidade = f"{int(item.get('downloadSpeed', 0)) / 1024:.1f} KB/s"
             tempo = "Calculando..."
 
-            # Insere na Treeview
-            self.tree.insert("", "end", values=(nome, progresso, velocidade, tempo, ""))    
+            # ✅ Simula botões na coluna Ações
+            status = item.get("status", "")
+            action_text = "[⏸ ⏹]" if status == "active" else "[⏵ ⏹]"
+
+            # Insere na Treeview com GID como identificador
+            self.tree.insert("", "end", iid=item["gid"], values=(nome, progresso, velocidade, tempo, action_text))
+    
 
 
     def add_download(self):
+        if not self.ensure_aria2_ready():
+            return  # Se Aria2 não estiver pronto, não continua
+
         url = self.entry_link.get().strip()
+        if not url:
+            tk.messagebox.showerror("Erro", "O link está vazio.")
+            return
+
         try:
             gid = self.controller.add_download(url)
             print(f"Download adicionado com GID: {gid}")
-            self.load_downloads()  # Atualiza a Treeview com todos os downloads
+            self.load_downloads()
         except Exception as e:
             print(f"Erro ao adicionar download: {e}")
+            tk.messagebox.showerror("Erro", f"Não foi possível adicionar o download:\n{e}")
+
 
 
     def update_aria2_status(self):
