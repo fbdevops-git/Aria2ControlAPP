@@ -11,8 +11,14 @@ from src.ui.utils.log_utils import Logger
 def main():
     Logger.setup_logger()
     Logger.log_info("Aplicativo iniciado.")
+    print("[DEBUG] Argumentos recebidos:", sys.argv)
 
     app = MainWindow()
+
+    # Se iniciado com o argumento --install-aria2, abrir a janela do instalador
+    if "--install-aria2" in sys.argv:
+        app.after(300, lambda: Aria2InstallerWindow(app))
+
 
     settings_window_instance = None
     network_window_instance = None
@@ -59,7 +65,6 @@ def main():
     except Exception as e:
         Logger.log_error(f"Erro crítico durante execução: {str(e)}")
         raise
-
 
 if __name__ == "__main__":
     main()
