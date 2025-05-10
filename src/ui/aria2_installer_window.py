@@ -11,6 +11,7 @@ from src.ui.utils.aria2_status_checker import Aria2StatusChecker
 
 
 class Aria2InstallerWindow(tk.Toplevel):
+
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -48,6 +49,7 @@ class Aria2InstallerWindow(tk.Toplevel):
             self.status_var.set("Instalando Aria2 com privilégios de administrador...")
             self.after(300, self.start_download_and_install)
 
+
     def init_gui(self):
         frame = ttk.Frame(self, padding="20")
         frame.pack(fill=tk.BOTH, expand=True)
@@ -64,13 +66,15 @@ class Aria2InstallerWindow(tk.Toplevel):
         status_label = ttk.Label(frame, textvariable=self.status_var)
         status_label.pack(pady=5)
 
+
     def check_if_installed(self):
         if Aria2StatusChecker.is_aria2_installed():
-            self.status_var.set("Aria2 já está instalado nesta máquina.")
+            self.status_var.set("Aria2 instalado com sucesso.")
             self.install_button.config(state=tk.DISABLED)
         else:
             self.status_var.set("Aria2 não instalado. Pronto para baixar e instalar.")
             self.install_button.config(state=tk.NORMAL)
+
 
     def update_progress(self, value, status_text=None):
         self.progress_var.set(value)
@@ -78,12 +82,14 @@ class Aria2InstallerWindow(tk.Toplevel):
             self.status_var.set(status_text)
         self.update_idletasks()
 
+
     def start_download_and_install(self):
         self.install_button.config(state=tk.DISABLED)
 
         thread = Thread(target=self._download_and_install_thread)
         thread.daemon = True
         thread.start()
+
 
     def _download_and_install_thread(self):
         try:
@@ -121,7 +127,8 @@ class Aria2InstallerWindow(tk.Toplevel):
                 if response:
                     SystemInfoUtils.run_as_admin(sys.executable, "-m src.main --install-aria2")
                     self.destroy()
-                    return
+                    os._exit(0)  # <- encerra o processo atual imediatamente
+
 
                 else:
                     self.status_var.set("Instalação cancelada pelo usuário.")
@@ -146,9 +153,10 @@ class Aria2InstallerWindow(tk.Toplevel):
                 if hasattr(self.parent, 'update_aria2_status'):
                     self.parent.update_aria2_status()
 
-
+            
         except Exception as e:
             self._show_error(f"Erro inesperado: {str(e)}")
+
 
     def _show_error(self, message):
         messagebox.showerror("Erro", message, parent=self)

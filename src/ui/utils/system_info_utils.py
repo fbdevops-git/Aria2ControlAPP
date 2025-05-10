@@ -34,7 +34,7 @@ class SystemInfoUtils:
             args: Argumentos para o executável
         """
         try:
-            ctypes.windll.shell32.ShellExecuteW(None, "runas", executable, args, None, 1)
+            ctypes.windll.shell32.ShellExecuteW(None, "runas", executable, args, None, 0)
         except Exception as e:
             raise Exception(f"Não foi possível obter privilégios de administrador: {str(e)}")
     

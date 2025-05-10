@@ -166,6 +166,7 @@ class Aria2Installer:
                 progress_callback(100, "Instalação concluída com sucesso!")
 
             result['success'] = True
+            os.environ["PATH"] += ";" + install_dir  # ← insira isso aqui
             return result
 
         except Exception as e:
